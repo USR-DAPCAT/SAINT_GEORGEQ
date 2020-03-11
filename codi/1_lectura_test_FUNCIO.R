@@ -1,5 +1,5 @@
 #............#
-# 09.3.2020  #
+# 11.3.2020  #
 #............#
 
 
@@ -52,53 +52,22 @@ devtools::source_url(link_source)
 #
 
 dades<-foreign::read.spss(here::here("dades","SGRQ_ejemplo.sav"),use.value.labels = F,to.data.frame = T)
-#dades
+dades2 <-dades
 
 
-
-dt <-dades
 
 
 # Objectiu: Transformar dades a puntuacions SG
 
 
-# Preparcio de la base de dades:
-
-
-
-
-#1)
-
-# S'han de recodificar els missings
-
-
-dades2 <-dades %>% 
-  mutate_at(dplyr::vars("sg1":"sg165"),~if_else(is.na(.),9,.)) 
-
-dades2 <-dades2 %>% 
-  mutate_at("sg17",~if_else(is.na(.),9,.)) 
-
-
-#2) recodifiquem de 2 a 0!
-
-dades2 <-dades2 %>% 
-  mutate_at(dplyr::vars("sg111":"sg165"),~ifelse(.==2,0,.))
-
-
-#3)
-# En la variable SG10 hi ha valors no vàlids (IF (SG10 EQ 4) SG10=9).
-
-dades2<-dades2%>%
-  mutate(sg10=case_when(sg10==4~ 9,TRUE ~ sg10))
-
-dades2<-dades2%>%select(-sg16_6)
 
 
 
 
 
 
-########################FUNCIO!!!
+
+
 
 
 
@@ -230,6 +199,31 @@ SANT_GEORGES<-function(dt=dades2) {
 
 #dt=dades2  
 
+# possibles recodificacions!.  
+
+  
+#---------------------------------------------------------------------------#    
+#0_i)
+# S'han de recodificar els missings si ni hi ha!.
+dt <-dt %>% 
+  mutate_at(dplyr::vars("sg1":"sg165"),~if_else(is.na(.),9,.)) 
+dt<-dt %>% 
+  mutate_at("sg17",~if_else(is.na(.),9,.)) 
+#
+#---------------------------------------------------------------------------#
+#0_ii) recodifiquem de 2 a 0!
+dades2 <-dades2 %>% 
+  mutate_at(dplyr::vars("sg111":"sg165"),~ifelse(.==2,0,.))
+#  
+#---------------------------------------------------------------------------#  
+#0_iii) En la variable SG10 hi ha valors no vàlids (IF (SG10 EQ 4) SG10=9).
+dt<-dt%>%
+  mutate(sg10=case_when(sg10==4~ 9,TRUE ~ sg10))
+#
+#---------------------------------------------------------------------------#
+  
+  
+  
 #1)
 #*SG1
 dt<-dt%>%mutate(PSG1=case_when(sg1==1~ 80.6,
@@ -894,7 +888,7 @@ RRR$SYMPTOM
 
 
 
-
+#Exemple:[]
 
 
 
